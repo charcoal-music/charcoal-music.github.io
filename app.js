@@ -2,6 +2,18 @@ const API_KEY = 'AIzaSyDXtWbgXpuwXOuRLu4mFyn0lMmhtD4Npzg';
 const searchButton = document.getElementById('search-button');
 const searchInput = document.getElementById('search-input');
 const songsContainer = document.getElementById('songs-container');
+let player;
+
+// Initialize YouTube IFrame API
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '340',
+    width: '600',
+    events: {
+      onReady: () => console.log('Player ready'),
+    },
+  });
+}
 
 searchButton.addEventListener('click', () => {
   const query = searchInput.value.trim();
@@ -39,6 +51,8 @@ function displaySongs(songs) {
 }
 
 function playSong(videoId) {
-  const playerWindow = window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
-  playerWindow.focus();
+  if (player) {
+    player.loadVideoById(videoId);
+    player.playVideo();
+  }
 }
